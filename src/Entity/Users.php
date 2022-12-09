@@ -4,25 +4,59 @@ namespace App\Entity;
 
 use App\Repository\UsersRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
-class Users
+class Users implements EntityInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+	#[Assert\Regex(
+		pattern: '/[^AaĄąBbCcĆćDdEeĘęFfGgHhIiJjKkLlŁłMmNnŃńOoÓóPpRrSsŚśTtUuWwYyZzŹźŻż]/',
+		message: 'firstName should contain only letters',
+		match: false
+	)]
+	#[Assert\NotBlank(
+		message: 'firstName should not be empty'
+	)]
+    #[ORM\Column(length: 20)]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 255)]
+	#[Assert\Regex(
+		pattern: '/[^AaĄąBbCcĆćDdEeĘęFfGgHhIiJjKkLlŁłMmNnŃńOoÓóPpRrSsŚśTtUuWwYyZzŹźŻż]/',
+		message: 'lastName should contain only letters',
+		match: false
+	)]
+	#[Assert\NotBlank(
+		message: 'lastName should not be empty'
+	)]
+    #[ORM\Column(length: 20)]
     private ?string $LastName = null;
 
+	#[Assert\Regex(
+		pattern: '/\d{9}/',
+		message: 'phone should contain only digits',
+		match: false
+	)]
+	#[Assert\NotBlank(
+		message: 'phone should not be empty'
+	)]
     #[ORM\Column]
     private ?int $phone = null;
 
-    #[ORM\Column(length: 255)]
+	#[Assert\Email(
+		message: 'email is not a valid email address',
+	)]
+	#[Assert\NotBlank(
+		message: 'email should not be empty'
+	)]
+	#[Assert\Length(min: 9, max: 13,
+		minMessage: 'Passed phone is too short',
+		maxMessage: 'Passed phone is too long')]
+    #[ORM\Column(length: 100)]
     private ?string $email = null;
 
     #[ORM\Column(length: 500)]
