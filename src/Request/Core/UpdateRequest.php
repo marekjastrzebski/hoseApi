@@ -5,11 +5,13 @@ namespace App\Request\Core;
 
 use App\Entity\EntityInterface;
 use App\Entity\Users;
+use App\Request\RequestInterface;
 use App\Validation\RequestValidation;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class UpdateRequest extends RequestValidation
+abstract class UpdateRequest extends RequestValidation implements RequestInterface
 {
 	private int $id;
 	private string $repositoryClass;
@@ -38,4 +40,6 @@ class UpdateRequest extends RequestValidation
 
 		return $entity;
 	}
+
+	abstract public function getRepository(): EntityRepository;
 }
