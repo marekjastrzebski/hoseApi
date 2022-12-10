@@ -2,13 +2,12 @@
 declare(strict_types=1);
 namespace App\Request\Core;
 
-use App\Request\RequestInterface;
-use App\Utils\BasicRepository;
 use Symfony\Component\HttpFoundation\Response;
 
 class RequestExecutor
 {
 	private RequestInterface $request;
+	private int $responseCode = Response::HTTP_OK;
 
 	public function persist(RequestInterface $request): void
 	{
@@ -21,7 +20,7 @@ class RequestExecutor
 			$this->responseCode = Response::HTTP_BAD_REQUEST;
 			return;
 		}
-		$this->request->getRepository()->save($this->request->getValidEntity());
+		$this->request->getRepository()->save($this->request->getValidEntity(), true);
 	}
 
 	public function getResults(): array
@@ -32,5 +31,14 @@ class RequestExecutor
 
 		return $this->request->getRepository()->getOneById($this->request->getValidEntity()->getId());
 	}
+
+	/**
+	 * @return int
+	 */
+	public function getResponseCode(): int
+	{
+		return $this->responseCode;
+	}
+
 
 }

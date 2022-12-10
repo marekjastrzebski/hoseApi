@@ -7,15 +7,18 @@ use App\Repository\UsersRepository;
 use App\Request\Core\UpdateRequest;
 use App\Request\RequestInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UpdateUserRequest extends UpdateRequest
 {
 	public function __construct(private readonly UsersRepository $repository,
 								ValidatorInterface               $validator,
-								ManagerRegistry                  $registry)
+								ManagerRegistry                  $registry,
+								RequestStack                     $request)
 	{
-		parent::__construct($validator, $registry);
+		parent::__construct($validator, $registry, $request);
+		$this->request = $request;
 	}
 
 	/**

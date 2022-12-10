@@ -36,16 +36,16 @@ class Users implements EntityInterface
     #[ORM\Column(length: 20)]
     private ?string $LastName = null;
 
-	#[Assert\Regex(
-		pattern: '/\d{9}/',
-		message: 'phone should contain only digits',
-		match: false
-	)]
+
 	#[Assert\NotBlank(
 		message: 'phone should not be empty'
 	)]
+	#[Assert\Length(min: 9, max: 13,
+		minMessage: 'Passed phone is too short',
+		maxMessage: 'Passed phone is too long')]
     #[ORM\Column]
     private ?int $phone = null;
+
 
 	#[Assert\Email(
 		message: 'email is not a valid email address',
@@ -53,9 +53,6 @@ class Users implements EntityInterface
 	#[Assert\NotBlank(
 		message: 'email should not be empty'
 	)]
-	#[Assert\Length(min: 9, max: 13,
-		minMessage: 'Passed phone is too short',
-		maxMessage: 'Passed phone is too long')]
     #[ORM\Column(length: 100)]
     private ?string $email = null;
 
