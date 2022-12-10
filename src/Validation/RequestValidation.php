@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Validation;
 
 use App\Entity\EntityInterface;
-use App\Trait\RequestValidatorTrait;
+use App\Trait\EntityReflection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,10 +13,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class RequestValidation
 {
-	use RequestValidatorTrait;
+	use EntityReflection;
 
 	protected array $errors = [];
-	protected array $requestContent;
+	protected ?array $requestContent;
 	private ?EntityInterface $entity;
 
 	public function __construct(protected readonly ValidatorInterface $validator,
@@ -24,6 +24,9 @@ class RequestValidation
 								protected RequestStack                     $request)
 	{
 		$this->requestContent = json_decode($this->request->getCurrentRequest()->getContent(), true);
+		if(!$this->requestContent){
+			$this->errors[] = 'Request is not valid JSON';
+		}
 	}
 
 	/**
@@ -60,9 +63,12 @@ class RequestValidation
 
 	private function prepareRelationProperties(): void
 	{
+
+		if(!$this->requestContent){
+			return;
+		}
 		foreach ($this->extractRelationProperties($this->getRelationProperties($this->entity)) as $name => $value) {
 			if (!isset($this->requestContent[$name])) {
-
 				continue;
 			}
 			$repositoryName = $this->getRepositoryName($value);
@@ -78,6 +84,9 @@ class RequestValidation
 
 	private function populate(): void
 	{
+		if(!$this->entity || !$this->requestContent){
+			return;
+		}
 		foreach ($this->requestContent as $name => $value) {
 			$setter = 'set' . $name;
 			if (!method_exists($this->entity, $setter)) {

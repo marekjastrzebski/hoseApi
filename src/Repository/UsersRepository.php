@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Users;
+use App\Trait\RepositorySupport;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,8 +15,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Users[]    findAll()
  * @method Users[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UsersRepository extends ServiceEntityRepository
+class UsersRepository extends ServiceEntityRepository implements RepositoryInterface
 {
+	use RepositorySupport;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Users::class);
@@ -39,28 +41,13 @@ class UsersRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Users[] Returns an array of Users objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+	public function getOneById(?int $id): ?array
+	{
+		if(!$id){
+			return [];
+		}
+		$entity = $this->find($id);
 
-//    public function findOneBySomeField($value): ?Users
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+		return $this->fetchEntity($entity);
+	}
 }
