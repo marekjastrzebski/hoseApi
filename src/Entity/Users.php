@@ -15,52 +15,56 @@ class Users implements EntityInterface
     private ?int $id = null;
 
 	#[Assert\Regex(
-		pattern: '/[^AaĄąBbCcĆćDdEeĘęFfGgHhIiJjKkLlŁłMmNnŃńOoÓóPpRrSsŚśTtUuWwYyZzŹźŻż]/',
-		message: 'firstName should contain only letters',
-		match: false
-	)]
-	#[Assert\NotBlank(
-		message: 'firstName should not be empty'
-	)]
-    #[ORM\Column(length: 20)]
-    private ?string $firstName = null;
+         		pattern: '/[^AaĄąBbCcĆćDdEeĘęFfGgHhIiJjKkLlŁłMmNnŃńOoÓóPpRrSsŚśTtUuWwYyZzŹźŻż]/',
+         		message: 'firstName should contain only letters',
+         		match: false
+         	)]
+         	#[Assert\NotBlank(
+         		message: 'firstName should not be empty'
+         	)]
+             #[ORM\Column(length: 20)]
+             private ?string $firstName = null;
 
 	#[Assert\Regex(
-		pattern: '/[^AaĄąBbCcĆćDdEeĘęFfGgHhIiJjKkLlŁłMmNnŃńOoÓóPpRrSsŚśTtUuWwYyZzŹźŻż]/',
-		message: 'lastName should contain only letters',
-		match: false
-	)]
-	#[Assert\NotBlank(
-		message: 'lastName should not be empty'
-	)]
-    #[ORM\Column(length: 20)]
-    private ?string $LastName = null;
+         		pattern: '/[^AaĄąBbCcĆćDdEeĘęFfGgHhIiJjKkLlŁłMmNnŃńOoÓóPpRrSsŚśTtUuWwYyZzŹźŻż]/',
+         		message: 'lastName should contain only letters',
+         		match: false
+         	)]
+         	#[Assert\NotBlank(
+         		message: 'lastName should not be empty'
+         	)]
+             #[ORM\Column(length: 20)]
+             private ?string $LastName = null;
 
 
 	#[Assert\NotBlank(
-		message: 'phone should not be empty'
-	)]
-	#[Assert\Length(min: 9, max: 13,
-		minMessage: 'Passed phone is too short',
-		maxMessage: 'Passed phone is too long')]
-    #[ORM\Column]
-    private ?int $phone = null;
+         		message: 'phone should not be empty'
+         	)]
+         	#[Assert\Length(min: 9, max: 13,
+         		minMessage: 'Passed phone is too short',
+         		maxMessage: 'Passed phone is too long')]
+             #[ORM\Column]
+             private ?int $phone = null;
 
 
 	#[Assert\Email(
-		message: 'email is not a valid email address',
-	)]
-	#[Assert\NotBlank(
-		message: 'email should not be empty'
-	)]
-    #[ORM\Column(length: 100)]
-    private ?string $email = null;
+         		message: 'email is not a valid email address',
+         	)]
+         	#[Assert\NotBlank(
+         		message: 'email should not be empty'
+         	)]
+             #[ORM\Column(length: 100)]
+             private ?string $email = null;
 
     #[ORM\Column(length: 500)]
     private ?string $password = null;
 
     #[ORM\ManyToOne(inversedBy: 'client')]
     private ?Abonaments $abonament = null;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Roles $role = null;
 
     public function getId(): ?int
     {
@@ -135,6 +139,18 @@ class Users implements EntityInterface
     public function setAbonament(?Abonaments $abonament): self
     {
         $this->abonament = $abonament;
+
+        return $this;
+    }
+
+    public function getRole(): ?Roles
+    {
+        return $this->role;
+    }
+
+    public function setRole(?Roles $role): self
+    {
+        $this->role = $role;
 
         return $this;
     }

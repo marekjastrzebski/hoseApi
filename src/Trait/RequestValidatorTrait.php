@@ -25,7 +25,7 @@ trait RequestValidatorTrait
 
 	public function extractParamName(string $getter): string
 	{
-		return lcfirst(mb_strcut($getter, 0,3));
+		return lcfirst(substr($getter, 3));
 	}
 
 	public function extractRelationProperties(array $paramsList): array
@@ -35,5 +35,10 @@ trait RequestValidatorTrait
 		};
 
 		return array_filter($paramsList, $filter);
+	}
+
+	public function getRepositoryName(string $entityNameSpace): string
+	{
+		return str_replace('Entity', 'Repository', $entityNameSpace) . 'Repository';
 	}
 }

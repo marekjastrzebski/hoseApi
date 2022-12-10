@@ -61,17 +61,17 @@ class RequestValidation
 	private function prepareRelationProperties(): void
 	{
 		foreach ($this->extractRelationProperties($this->getRelationProperties($this->entity)) as $name => $value) {
-			if (!isset($this->requestContent[$name]) || !is_int($this->requestContent[$name])) {
+			if (!isset($this->requestContent[$name])) {
+
 				continue;
 			}
-			$repositoryName = $value . 'Repository';
+			$repositoryName = $this->getRepositoryName($value);
 			$repository = new $repositoryName($this->registry);
 			assert($repository instanceof EntityRepository);
 			$entityInstance = $repository->find($this->requestContent[$name]);
 			if (!$entityInstance) {
 				$this->errors[] = $name . ' with id ' . $this->requestContent[$name] . ' does not exists';
 			}
-
 			$this->requestContent[$name] = $entityInstance ?? null;
 		}
 	}
