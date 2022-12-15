@@ -1,110 +1,175 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Entity;
 
 use App\Repository\UsersRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
+#[UniqueEntity('email', message: 'Email address is already in use')]
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
-class Users
+class Users implements EntityInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column]
+	private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $firstName = null;
+	#[Assert\Regex(
+		pattern: '/[^AaĄąBbCcĆćDdEeĘęFfGgHhIiJjKkLlŁłMmNnŃńOoÓóPpRrSsŚśTtUuWwYyZzŹźŻż]/',
+		message: 'firstName should contain only letters',
+		match: false
+	)]
+	#[Assert\NotBlank(
+		message: 'firstName should not be empty'
+	)]
+	#[ORM\Column(length: 20)]
+	private ?string $firstName = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $LastName = null;
+	#[Assert\Regex(
+		pattern: '/[^AaĄąBbCcĆćDdEeĘęFfGgHhIiJjKkLlŁłMmNnŃńOoÓóPpRrSsŚśTtUuWwYyZzŹźŻż]/',
+		message: 'lastName should contain only letters',
+		match: false
+	)]
+	#[Assert\NotBlank(
+		message: 'lastName should not be empty'
+	)]
+	#[ORM\Column(length: 20)]
+	private ?string $LastName = null;
 
-    #[ORM\Column]
-    private ?int $phone = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
+	#[Assert\NotBlank(
+		message: 'phone should not be empty'
+	)]
+	#[Assert\Length(min: 9, max: 13,
+		minMessage: 'Passed phone is too short',
+		maxMessage: 'Passed phone is too long')]
+	#[ORM\Column]
+	private ?int $phone = null;
 
-    #[ORM\Column(length: 500)]
-    private ?string $password = null;
 
-    #[ORM\ManyToOne(inversedBy: 'client')]
-    private ?Abonaments $abonament = null;
+	#[Assert\Email(
+		message: 'email is not a valid email address',
+	)]
+	#[Assert\NotBlank(
+		message: 'email should not be empty'
+	)]
+	#[ORM\Column(length: 100)]
+	private ?string $email = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+	#[ORM\Column(length: 500)]
+	private ?string $password = null;
 
-    public function getFirstName(): ?string
-    {
-        return $this->firstName;
-    }
+	#[ORM\ManyToOne(inversedBy: 'client')]
+	private ?Abonaments $abonament = null;
 
-    public function setFirstName(string $firstName): self
-    {
-        $this->firstName = $firstName;
+	#[ORM\ManyToOne(inversedBy: 'users')]
+	#[ORM\JoinColumn(nullable: false)]
+	private ?Roles $role = null;
 
-        return $this;
-    }
+	#[ORM\Column]
+	private ?bool $activeLogin = null;
 
-    public function getLastName(): ?string
-    {
-        return $this->LastName;
-    }
+	public function getId(): ?int
+	{
+		return $this->id;
+	}
 
-    public function setLastName(string $LastName): self
-    {
-        $this->LastName = $LastName;
+	public function getFirstName(): ?string
+	{
+		return $this->firstName;
+	}
 
-        return $this;
-    }
+	public function setFirstName(string $firstName): self
+	{
+		$this->firstName = $firstName;
 
-    public function getPhone(): ?int
-    {
-        return $this->phone;
-    }
+		return $this;
+	}
 
-    public function setPhone(int $phone): self
-    {
-        $this->phone = $phone;
+	public function getLastName(): ?string
+	{
+		return $this->LastName;
+	}
 
-        return $this;
-    }
+	public function setLastName(string $LastName): self
+	{
+		$this->LastName = $LastName;
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
+		return $this;
+	}
 
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
+	public function getPhone(): ?int
+	{
+		return $this->phone;
+	}
 
-        return $this;
-    }
+	public function setPhone(int $phone): self
+	{
+		$this->phone = $phone;
 
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
+		return $this;
+	}
 
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
+	public function getEmail(): ?string
+	{
+		return $this->email;
+	}
 
-        return $this;
-    }
+	public function setEmail(string $email): self
+	{
+		$this->email = $email;
 
-    public function getAbonament(): ?Abonaments
-    {
-        return $this->abonament;
-    }
+		return $this;
+	}
 
-    public function setAbonament(?Abonaments $abonament): self
-    {
-        $this->abonament = $abonament;
+	public function getPassword(): ?string
+	{
+		return $this->password;
+	}
 
-        return $this;
-    }
+	public function setPassword(string $password): self
+	{
+		$this->password = $password;
+
+		return $this;
+	}
+
+	public function getAbonament(): ?Abonaments
+	{
+		return $this->abonament;
+	}
+
+	public function setAbonament(?Abonaments $abonament): self
+	{
+		$this->abonament = $abonament;
+
+		return $this;
+	}
+
+	public function getRole(): ?Roles
+	{
+		return $this->role;
+	}
+
+	public function setRole(?Roles $role): self
+	{
+		$this->role = $role;
+
+		return $this;
+	}
+
+	public function isActiveLogin(): ?bool
+	{
+		return $this->activeLogin;
+	}
+
+	public function setActiveLogin(bool $activeLogin): self
+	{
+		$this->activeLogin = $activeLogin;
+
+		return $this;
+	}
 }
