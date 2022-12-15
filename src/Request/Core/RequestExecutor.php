@@ -45,7 +45,14 @@ class RequestExecutor
 
 	private function fetchResults(): array
 	{
-		$results[] = $this->requestEntity->getRepository()->getOneById($this->requestEntity->getEntity()->getId());
+		if (!is_iterable($this->requestEntity->getEntity())) {
+			$results[] = $this->requestEntity->getRepository()->fetchEntity($this->requestEntity->getEntity());
+
+			return $results;
+		}
+		foreach ($this->requestEntity->getEntity() as $entity){
+			$results[] = $this->requestEntity->getRepository()->fetchEntity($entity);
+		}
 
 		return $results;
 	}
@@ -53,7 +60,8 @@ class RequestExecutor
 	/**
 	 * @return int
 	 */
-	public function getResponseCode(): int
+	public
+	function getResponseCode(): int
 	{
 		return $this->responseCode;
 	}

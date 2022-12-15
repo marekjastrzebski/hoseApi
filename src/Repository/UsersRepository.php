@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\Repository;
 
+use App\Entity\EntityInterface;
 use App\Entity\Users;
 use App\Trait\RepositorySupport;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -41,15 +42,4 @@ class UsersRepository extends ServiceEntityRepository implements RepositoryInter
         }
     }
 
-	public function getOneById(?int $id): ?array
-	{
-		if(!$id){
-			return [];
-		}
-		$entity = $this->find($id);
-		$results = $this->fetchEntity($entity);
-		unset($results['password']);
-
-		return $results;
-	}
 }
