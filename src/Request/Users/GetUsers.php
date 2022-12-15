@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace App\Request\Users;
 
-use App\Repository\RepositoryInterface;
-use App\Repository\RolesRepository;
+use App\Repository\UsersRepository;
 use App\Request\Core\GetRequest;
 
 class GetUsers extends GetRequest
