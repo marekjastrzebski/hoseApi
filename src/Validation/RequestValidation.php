@@ -32,7 +32,7 @@ class RequestValidation
 	/**
 	 * @return EntityInterface | null
 	 */
-	final public function getValidEntity(): ?EntityInterface
+	final public function getEntity(): ?EntityInterface
 	{
 		return $this->errors ? null : $this->entity;
 	}

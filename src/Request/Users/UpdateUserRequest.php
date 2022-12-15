@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace App\Request\Users;
 
+use App\Entity\Users;
 use App\Repository\UsersRepository;
 use App\Request\Core\UpdateRequest;
-use App\Request\RequestInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -18,7 +18,6 @@ class UpdateUserRequest extends UpdateRequest
 								RequestStack                     $request)
 	{
 		parent::__construct($validator, $registry, $request);
-		$this->request = $request;
 	}
 
 	/**

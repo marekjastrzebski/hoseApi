@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Users;
@@ -47,7 +47,9 @@ class UsersRepository extends ServiceEntityRepository implements RepositoryInter
 			return [];
 		}
 		$entity = $this->find($id);
+		$results = $this->fetchEntity($entity);
+		unset($results['password']);
 
-		return $this->fetchEntity($entity);
+		return $results;
 	}
 }

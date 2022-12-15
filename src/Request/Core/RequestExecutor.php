@@ -1,35 +1,53 @@
 <?php
 declare(strict_types=1);
+
 namespace App\Request\Core;
 
+use App\Enum\Execute;
 use Symfony\Component\HttpFoundation\Response;
 
 class RequestExecutor
 {
-	private RequestInterface $request;
+	private RequestInterface $requestEntity;
 	private int $responseCode = Response::HTTP_OK;
+	private array $results = [];
 
 	public function persist(RequestInterface $request): void
 	{
-		$this->request = $request;
+		$this->requestEntity = $request;
 	}
 
-	public function execute(): void
+	public function execute(Execute $executeMode): void
 	{
-		if(!empty($this->request->getErrors())){
+
+		if (!empty($this->requestEntity->getErrors())) {
 			$this->responseCode = Response::HTTP_BAD_REQUEST;
 			return;
 		}
-		$this->request->getRepository()->save($this->request->getValidEntity(), true);
+		if (!$this->requestEntity->getEntity()) {
+			$this->responseCode = Response::HTTP_NO_CONTENT;
+			return;
+		}
+		match ($executeMode) {
+			Execute::CREATE, Execute::UPDATE => $this->requestEntity->getRepository()->save($this->requestEntity->getEntity(), true),
+			default => null
+		};
 	}
 
 	public function getResults(): array
 	{
-		if(!empty($this->request->getErrors())){
-			return $this->request->getErrors();
+		if (!empty($this->requestEntity->getErrors())) {
+			return $this->requestEntity->getErrors();
 		}
 
-		return $this->request->getRepository()->getOneById($this->request->getValidEntity()->getId());
+		return $this->fetchResults();
+	}
+
+	private function fetchResults(): array
+	{
+		$results[] = $this->requestEntity->getRepository()->getOneById($this->requestEntity->getEntity()->getId());
+
+		return $results;
 	}
 
 	/**
@@ -39,6 +57,4 @@ class RequestExecutor
 	{
 		return $this->responseCode;
 	}
-
-
 }

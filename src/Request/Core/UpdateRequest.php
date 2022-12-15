@@ -15,32 +15,25 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 abstract class UpdateRequest extends RequestValidation implements RequestInterface
 {
 	private int $id;
-	private string $repositoryClass;
 
 	public function __construct(ValidatorInterface $validator, ManagerRegistry $registry, RequestStack $request)
 	{
 		parent::__construct($validator, $registry, $request);
 	}
 
-	public function updateId(int $id): void
+	public function setId(int $id): self
 	{
 		$this->id = $id;
 		$this->persist($this->getEntityById());
 		$this->validate();
+
+		return $this;
 	}
 
-	protected function setRepositoryClass(string $repositoryClass)
+	public function getEntityById(): ?EntityInterface
 	{
-		$this->repositoryClass = $repositoryClass;
-	}
-
-	protected function getEntityById(): ?EntityInterface
-	{
-		$entity = $this->registry
-			->getRepository($this->repositoryClass)
+		return $this->getRepository()
 			->find($this->id);
-
-		return $entity;
 	}
 
 	abstract public function getRepository(): EntityRepository;

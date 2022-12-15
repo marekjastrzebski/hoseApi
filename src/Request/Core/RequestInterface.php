@@ -8,6 +8,6 @@ use Doctrine\ORM\EntityRepository;
 interface RequestInterface
 {
 	public function getErrors(): array;
-	public function getValidEntity(): ?EntityInterface;
+	public function getEntity(): EntityInterface|array|null;
 	public function getRepository(): EntityRepository;
 }
