@@ -31,7 +31,12 @@ abstract class GetRequest implements RequestInterface
 		return $this;
 	}
 
+	final public function getAll()
+	{
+		$this->entity = $this->repository->findAll();
 
+		return $this;
+	}
 
 	public function getErrors(): array
 	{

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Roles;
+use App\Trait\RepositorySupport;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,8 +15,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Roles[]    findAll()
  * @method Roles[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class RolesRepository extends ServiceEntityRepository
+class RolesRepository extends ServiceEntityRepository implements RepositoryInterface
 {
+	use RepositorySupport;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Roles::class);
