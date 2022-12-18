@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\AbonamentTypes;
+use App\Trait\RepositorySupport;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,8 +15,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method AbonamentTypes[]    findAll()
  * @method AbonamentTypes[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AbonamentTypesRepository extends ServiceEntityRepository
+class AbonamentTypesRepository extends ServiceEntityRepository implements \App\Repository\RepositoryInterface
 {
+	use RepositorySupport;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, AbonamentTypes::class);

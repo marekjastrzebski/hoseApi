@@ -1,25 +1,24 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Request\Rides;
+namespace App\Request\AbonamentTypes;
 
-use App\Repository\RidesRepository;
+use App\Repository\AbonamentTypesRepository;
 use App\Request\Core\UpdateRequest;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class UpdateRides extends UpdateRequest
+class UpdateAbonamentTypes extends UpdateRequest
 {
 	public function __construct(
-		RidesRepository    $repository,
-		ValidatorInterface $validator,
-		ManagerRegistry    $registry,
-		RequestStack       $request
-	)
+		AbonamentTypesRepository $repository,
+		ValidatorInterface       $validator,
+		ManagerRegistry          $registry,
+		RequestStack             $request)
 	{
 		parent::__construct($repository, $validator, $registry, $request);
 	}
+
 
 }

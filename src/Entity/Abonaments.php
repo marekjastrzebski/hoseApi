@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: AbonamentsRepository::class)]
 class Abonaments implements EntityInterface
@@ -18,18 +20,24 @@ class Abonaments implements EntityInterface
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+	#[Assert\NotBlank(message: 'Abonament type should not be empty')]
     private ?AbonamentTypes $type = null;
 
     #[ORM\OneToMany(mappedBy: 'abonament', targetEntity: Users::class)]
+	#[Assert\NotBlank(message: 'Client should not empty')]
     private Collection $client;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+	#[Assert\NotBlank(message: 'start date should not be empty')]
     private ?\DateTimeInterface $startDay = null;
 
     #[ORM\Column]
+	#[Assert\Choice(choices: [true, false], message: 'Renewable should be true or false')]
+	#[Assert\NotBlank(message: 'Renewable can not be empty')]
     private ?bool $renewable = null;
 
     #[ORM\Column(nullable: true)]
+	#[Assert\Type(type: 'integer', message: 'Duration should be a number')]
     private ?int $duration = null;
 
     #[ORM\OneToMany(mappedBy: 'abonament', targetEntity: Payments::class)]
@@ -37,6 +45,9 @@ class Abonaments implements EntityInterface
 
     #[ORM\OneToMany(mappedBy: 'abonament', targetEntity: Rides::class)]
     private Collection $rides;
+
+    #[ORM\Column]
+    private ?bool $active = null;
 
     public function __construct()
     {
@@ -184,6 +195,18 @@ class Abonaments implements EntityInterface
                 $ride->setAbonament(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }

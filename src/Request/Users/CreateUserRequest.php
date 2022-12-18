@@ -7,18 +7,18 @@ use App\Entity\Users;
 use App\Repository\UsersRepository;
 use App\Request\Core\CreateRequest;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CreateUserRequest extends CreateRequest
 {
-	public function __construct(private readonly UsersRepository $repository,
-								ValidatorInterface               $validator,
-								ManagerRegistry                  $registry,
-								RequestStack                          $request)
+	public function __construct(
+		UsersRepository    $repository,
+		ValidatorInterface $validator,
+		ManagerRegistry    $registry,
+		RequestStack       $request)
 	{
-		parent::__construct((new Users()), $validator, $registry, $request);
+		parent::__construct($repository, (new Users()), $validator, $registry, $request);
 	}
 
 	/**
