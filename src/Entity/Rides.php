@@ -5,94 +5,100 @@ namespace App\Entity;
 use App\Repository\RidesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: RidesRepository::class)]
-class Rides
+class Rides implements EntityInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+	#[ORM\Id]
+	#[ORM\GeneratedValue]
+	#[ORM\Column]
+	private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $date = null;
+	#[ORM\Column(type: Types::DATE_MUTABLE)]
+	#[Assert\NotBlank(message: 'Ride date have to be set')]
+	private ?\DateTimeInterface $date = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $time = null;
+	#[ORM\ManyToOne]
+	#[ORM\JoinColumn(nullable: false)]
+	private ?Users $trainer = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Users $client = null;
+	#[ORM\Column]
+	#[Assert\Type('bool', message: 'Ride status should be boolean (True or false)')]
+	#[Assert\Choice(choices: [true, false])]
+	private ?bool $cancelled = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Users $trainer = null;
+	#[ORM\ManyToOne]
+	#[ORM\JoinColumn(nullable: false)]
+	private ?Abonaments $abonament = null;
 
-    #[ORM\Column]
-    private ?bool $cancelled = null;
+	#[ORM\ManyToOne]
+	private ?Horses $horse = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
+	public function getId(): ?int
+	{
+		return $this->id;
+	}
 
-    public function setDate(\DateTimeInterface $date): self
-    {
-        $this->date = $date;
+	public function getDate(): ?\DateTimeInterface
+	{
+		return $this->date;
+	}
 
-        return $this;
-    }
+	public function setDate(\DateTimeInterface $date): self
+	{
+		$this->date = $date;
 
-    public function getTime(): ?\DateTimeInterface
-    {
-        return $this->time;
-    }
+		return $this;
+	}
 
-    public function setTime(\DateTimeInterface $time): self
-    {
-        $this->time = $time;
+	public function getTrainer(): ?Users
+	{
+		return $this->trainer;
+	}
 
-        return $this;
-    }
+	public function setTrainer(?Users $trainer): self
+	{
+		$this->trainer = $trainer;
 
-    public function getClient(): ?Users
-    {
-        return $this->client;
-    }
+		return $this;
+	}
 
-    public function setClient(?Users $client): self
-    {
-        $this->client = $client;
+	public function isCancelled(): ?bool
+	{
+		return $this->cancelled;
+	}
 
-        return $this;
-    }
+	public function setCancelled(bool $cancelled): self
+	{
+		$this->cancelled = $cancelled;
 
-    public function getTrainer(): ?Users
-    {
-        return $this->trainer;
-    }
+		return $this;
+	}
 
-    public function setTrainer(?Users $trainer): self
-    {
-        $this->trainer = $trainer;
+	public function getAbonament(): ?Abonaments
+	{
+		return $this->abonament;
+	}
 
-        return $this;
-    }
+	public function setAbonament(?Abonaments $abonament): self
+	{
+		$this->abonament = $abonament;
 
-    public function isCancelled(): ?bool
-    {
-        return $this->cancelled;
-    }
+		return $this;
+	}
 
-    public function setCancelled(bool $cancelled): self
-    {
-        $this->cancelled = $cancelled;
+	public function getHorse(): ?Horses
+	{
+		return $this->horse;
+	}
 
-        return $this;
-    }
+	public function setHorse(?Horses $horse): self
+	{
+		$this->horse = $horse;
+
+		return $this;
+	}
 }

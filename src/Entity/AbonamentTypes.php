@@ -6,7 +6,7 @@ use App\Repository\AbonamentTypesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AbonamentTypesRepository::class)]
-class AbonamentTypes
+class AbonamentTypes implements EntityInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

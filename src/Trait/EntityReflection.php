@@ -7,7 +7,7 @@ use App\Entity\EntityInterface;
 
 trait EntityReflection
 {
-	public function getRelationProperties(EntityInterface $entity): array
+	public function getPropertiTypes(EntityInterface $entity): array
 	{
 		$reflection = new \ReflectionClass($entity);
 		$relations = [];
@@ -41,6 +41,16 @@ trait EntityReflection
 
 		return array_filter($paramsList, $filter);
 	}
+
+	public function extractDateTimeProperties(array $paramsList): array
+	{
+		$filter = function ($value) {
+			return str_contains($value, 'DateTimeInterface');
+		};
+
+		return array_filter($paramsList, $filter);
+	}
+
 
 	public function getRepositoryName(string $entityNameSpace): string
 	{

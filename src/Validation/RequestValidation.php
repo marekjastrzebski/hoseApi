@@ -5,6 +5,7 @@ namespace App\Validation;
 
 use App\Entity\EntityInterface;
 use App\Trait\EntityReflection;
+use Cassandra\Date;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,7 +68,7 @@ class RequestValidation
 		if(!$this->requestContent){
 			return;
 		}
-		foreach ($this->extractRelationProperties($this->getRelationProperties($this->entity)) as $name => $value) {
+		foreach ($this->extractRelationProperties($this->getPropertiTypes($this->entity)) as $name => $value) {
 			if (!isset($this->requestContent[$name])) {
 				continue;
 			}
@@ -87,11 +88,15 @@ class RequestValidation
 		if(!$this->entity || !$this->requestContent){
 			return;
 		}
+		$properties =$this->getPropertiTypes($this->entity);
 		foreach ($this->requestContent as $name => $value) {
 			$setter = 'set' . $name;
 			if (!method_exists($this->entity, $setter)) {
 				$this->errors[] = 'Couldn\'t find ' . $name . ' as data destiny.';
 				continue;
+			}
+			if(array_key_exists($name, $this->extractDateTimeProperties($properties))){
+				$value = new \DateTime($value);
 			}
 
 			$this->entity->$setter($value);

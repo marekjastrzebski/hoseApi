@@ -45,6 +45,7 @@ class RequestExecutor
 
 	private function fetchResults(): array
 	{
+		$results = [];
 		if (!is_iterable($this->requestEntity->getEntity())) {
 			$results[] = $this->requestEntity->getRepository()->fetchEntity($this->requestEntity->getEntity());
 

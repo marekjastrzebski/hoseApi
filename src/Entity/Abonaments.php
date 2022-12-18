@@ -9,7 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AbonamentsRepository::class)]
-class Abonaments
+class Abonaments implements EntityInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -35,10 +35,14 @@ class Abonaments
     #[ORM\OneToMany(mappedBy: 'abonament', targetEntity: Payments::class)]
     private Collection $payments;
 
+    #[ORM\OneToMany(mappedBy: 'abonament', targetEntity: Rides::class)]
+    private Collection $rides;
+
     public function __construct()
     {
         $this->client = new ArrayCollection();
         $this->payments = new ArrayCollection();
+        $this->rides = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -148,6 +152,36 @@ class Abonaments
             // set the owning side to null (unless already changed)
             if ($payment->getAbonament() === $this) {
                 $payment->setAbonament(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rides>
+     */
+    public function getRides(): Collection
+    {
+        return $this->rides;
+    }
+
+    public function addRide(Rides $ride): self
+    {
+        if (!$this->rides->contains($ride)) {
+            $this->rides->add($ride);
+            $ride->setAbonament($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRide(Rides $ride): self
+    {
+        if ($this->rides->removeElement($ride)) {
+            // set the owning side to null (unless already changed)
+            if ($ride->getAbonament() === $this) {
+                $ride->setAbonament(null);
             }
         }
 
