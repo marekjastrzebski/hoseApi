@@ -4,11 +4,10 @@ declare(strict_types=1);
 namespace App\Request\Core;
 
 use App\Entity\EntityInterface;
-use App\Entity\Users;
+use App\Repository\RepositoryInterface;
 use App\Validation\RequestValidation;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -16,7 +15,12 @@ abstract class UpdateRequest extends RequestValidation implements RequestInterfa
 {
 	private int $id;
 
-	public function __construct(ValidatorInterface $validator, ManagerRegistry $registry, RequestStack $request)
+	public function __construct(
+		protected readonly EntityRepository $repository,
+		ValidatorInterface                     $validator,
+		ManagerRegistry                        $registry,
+		RequestStack                           $request
+	)
 	{
 		parent::__construct($validator, $registry, $request);
 	}
@@ -36,5 +40,8 @@ abstract class UpdateRequest extends RequestValidation implements RequestInterfa
 			->find($this->id);
 	}
 
-	abstract public function getRepository(): EntityRepository;
+	public function getRepository(): EntityRepository
+	{
+		return $this->repository;
+	}
 }

@@ -16,7 +16,7 @@ class RolesController extends \Symfony\Bundle\FrameworkBundle\Controller\Abstrac
 	{
 	}
 
-	#[Route('/api/roles', methods: ['POST'])]
+	#[Route('/api/role', methods: ['POST'])]
 	public function createRole(CreateRole $role): JsonResponse
 	{
 		$this->executor->persist($role);
@@ -25,7 +25,7 @@ class RolesController extends \Symfony\Bundle\FrameworkBundle\Controller\Abstrac
 		return new JsonResponse($this->executor->getResults(), $this->executor->getResponseCode());
 	}
 
-	#[Route('/api/roles/{id}', methods: ['PATCH'])]
+	#[Route('/api/role/{id}', methods: ['PATCH'])]
 	public function updateRole(UpdateRoles $role, int $id): JsonResponse
 	{
 		$this->executor->persist($role->setId($id));
@@ -34,7 +34,7 @@ class RolesController extends \Symfony\Bundle\FrameworkBundle\Controller\Abstrac
 		return new JsonResponse($this->executor->getResults(), $this->executor->getResponseCode());
 	}
 
-	#[Route('/api/roles/{id}', methods: ['GET'])]
+	#[Route('/api/role/{id}', methods: ['GET'])]
 	public function getRole(GetRoles $role, int $id): JsonResponse
 	{
 		$this->executor->persist($role->getById($id));

@@ -18,7 +18,7 @@ class RidesController extends AbstractController
 	{
 	}
 
-	#[Route('/api/rides', methods: ['POST'])]
+	#[Route('/api/ride', methods: ['POST'])]
 	public function createRides(CreateRides $rides): JsonResponse
 	{
 		$this->executor->persist($rides);

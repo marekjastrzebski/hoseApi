@@ -18,7 +18,7 @@ class UsersController extends AbstractController
 	{
 	}
 
-	#[Route('/api/users', methods: ['POST'])]
+	#[Route('/api/user', methods: ['POST'])]
 	public function createUser(CreateUserRequest $user): JsonResponse
 	{
 		$this->executor->persist($user);
@@ -27,7 +27,7 @@ class UsersController extends AbstractController
 		return new JsonResponse($this->executor->getResults(), $this->executor->getResponseCode());
 	}
 
-	#[Route('/api/users/{id}', methods: ['PATCH'])]
+	#[Route('/api/user/{id}', methods: ['PATCH'])]
 	public function updateUser(UpdateUserRequest $user, int $id): JsonResponse
 	{
 		$this->executor->persist($user->setId($id));
@@ -36,7 +36,7 @@ class UsersController extends AbstractController
 		return new JsonResponse($this->executor->getResults(), $this->executor->getResponseCode());
 	}
 
-	#[Route('/api/users/{id}', methods: ['GET'])]
+	#[Route('/api/user/{id}', methods: ['GET'])]
 	public function getUserById(GetUsers $user, int $id): JsonResponse
 	{
 		$this->executor->persist($user->getById($id));
