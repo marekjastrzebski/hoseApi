@@ -17,7 +17,7 @@ class AbonamnetTypesController extends AbstractController
 	{
 	}
 
-	#[Route('/api/abonamentTypes', methods: ['POST'])]
+	#[Route('/api/abonamentType', methods: ['POST'])]
 	public function createAbonamentType(CreateAbonamentTypes $abonamentTypes): JsonResponse
 	{
 		$this->executor->persist($abonamentTypes);
@@ -26,7 +26,7 @@ class AbonamnetTypesController extends AbstractController
 		return new JsonResponse($this->executor->getResults(), $this->executor->getResponseCode());
 	}
 
-	#[Route('/api/abonamentTypes/{id}', methods: ['PATCH'])]
+	#[Route('/api/abonamentType/{id}', methods: ['PATCH'])]
 	public function updateAbonamentType(UpdateAbonamentTypes $abonamentTypes, int $id): JsonResponse
 	{
 		$this->executor->persist($abonamentTypes->setId($id));
