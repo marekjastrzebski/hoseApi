@@ -9,7 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HorsesRepository::class)]
-class Horses
+class Horses implements EntityInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -40,9 +40,13 @@ class Horses
     #[ORM\Column(nullable: true)]
     private ?bool $remarks = null;
 
+    #[ORM\OneToMany(mappedBy: 'horse', targetEntity: Rides::class)]
+    private Collection $rides;
+
     public function __construct()
     {
         $this->contusions = new ArrayCollection();
+        $this->rides = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -161,6 +165,36 @@ class Horses
     public function setRemarks(?bool $remarks): self
     {
         $this->remarks = $remarks;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rides>
+     */
+    public function getRides(): Collection
+    {
+        return $this->rides;
+    }
+
+    public function addRide(Rides $ride): self
+    {
+        if (!$this->rides->contains($ride)) {
+            $this->rides->add($ride);
+            $ride->setHorse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRide(Rides $ride): self
+    {
+        if ($this->rides->removeElement($ride)) {
+            // set the owning side to null (unless already changed)
+            if ($ride->getHorse() === $this) {
+                $ride->setHorse(null);
+            }
+        }
 
         return $this;
     }

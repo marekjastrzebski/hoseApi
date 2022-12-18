@@ -24,6 +24,9 @@ class Roles implements EntityInterface
     #[ORM\OneToMany(mappedBy: 'role', targetEntity: Users::class)]
     private Collection $users;
 
+    #[ORM\Column(length: 500, nullable: true)]
+    private ?string $description = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -84,6 +87,18 @@ class Roles implements EntityInterface
                 $user->setRole(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

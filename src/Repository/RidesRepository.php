@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Rides;
+use App\Trait\RepositorySupport;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,8 +15,9 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Rides[]    findAll()
  * @method Rides[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class RidesRepository extends ServiceEntityRepository
+class RidesRepository extends ServiceEntityRepository implements RepositoryInterface
 {
+	use RepositorySupport;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Rides::class);
@@ -38,6 +40,16 @@ class RidesRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+	public function getDaily(\DateTime $date): ?array
+	{
+		return $this->findBy(['date' => $date]);
+	}
+
+	public function getByManyDates(array $dates): ?array
+	{
+		return $this->findBy(['date' => $dates]);
+	}
 
 //    /**
 //     * @return Rides[] Returns an array of Rides objects

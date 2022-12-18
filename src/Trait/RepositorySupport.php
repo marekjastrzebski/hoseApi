@@ -36,6 +36,9 @@ trait RepositorySupport
 		$results = [];
 		foreach ($this->getEntityGetters($entity) as $field => $getter) {
 			$value = $entity->$getter();
+			if($value instanceof \DateTime){
+				$value = explode(' ',$value->format('Y-m-d H:i'));
+			}
 			if($value instanceof EntityInterface){
 				$value = $this->fetchEntity($value);
 			}
