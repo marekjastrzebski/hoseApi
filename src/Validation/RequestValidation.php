@@ -5,10 +5,8 @@ namespace App\Validation;
 
 use App\Entity\EntityInterface;
 use App\Trait\EntityReflection;
-use Cassandra\Date;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -20,12 +18,14 @@ class RequestValidation
 	protected ?array $requestContent;
 	private ?EntityInterface $entity;
 
-	public function __construct(protected readonly ValidatorInterface $validator,
-								protected readonly ManagerRegistry    $registry,
-								protected RequestStack                     $request)
+	public function __construct(
+		protected readonly ValidatorInterface $validator,
+		protected readonly ManagerRegistry    $registry,
+		protected RequestStack                $request
+	)
 	{
-		$this->requestContent = json_decode($this->request->getCurrentRequest()->getContent(), true);
-		if(!$this->requestContent){
+		$this->requestContent = json_decode($this->request->getCurrentRequest()->getContent(), true, 512, JSON_THROW_ON_ERROR);
+		if (!$this->requestContent) {
 			$this->errors[] = 'Request is not valid JSON';
 		}
 	}
@@ -65,7 +65,7 @@ class RequestValidation
 	private function prepareRelationProperties(): void
 	{
 
-		if(!$this->requestContent){
+		if (!$this->requestContent) {
 			return;
 		}
 		foreach ($this->extractRelationProperties($this->getPropertiTypes($this->entity)) as $name => $value) {
@@ -85,17 +85,17 @@ class RequestValidation
 
 	private function populate(): void
 	{
-		if(!$this->entity || !$this->requestContent){
+		if (!$this->entity || !$this->requestContent) {
 			return;
 		}
-		$properties =$this->getPropertiTypes($this->entity);
+		$properties = $this->getPropertiTypes($this->entity);
 		foreach ($this->requestContent as $name => $value) {
 			$setter = 'set' . $name;
 			if (!method_exists($this->entity, $setter)) {
 				$this->errors[] = 'Couldn\'t find ' . $name . ' as data destiny.';
 				continue;
 			}
-			if(array_key_exists($name, $this->extractDateTimeProperties($properties))){
+			if (array_key_exists($name, $this->extractDateTimeProperties($properties))) {
 				$value = new \DateTime($value);
 			}
 

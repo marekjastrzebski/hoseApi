@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Request\Roles;
 
 use App\Entity\Roles;
@@ -16,13 +16,9 @@ class CreateRole extends CreateRequest
 		RolesRepository    $repository,
 		ValidatorInterface $validator,
 		ManagerRegistry    $registry,
-		RequestStack       $request)
+		RequestStack       $request
+	)
 	{
 		parent::__construct($repository, (new Roles()), $validator, $registry, $request);
-	}
-
-	public function getRepository(): EntityRepository
-	{
-		return $this->repository;
 	}
 }

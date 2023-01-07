@@ -5,12 +5,7 @@ namespace App\Request\Core;
 
 use App\Entity\EntityInterface;
 use App\Repository\RepositoryInterface;
-use App\Validation\RequestValidation;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
-use mysql_xdevapi\Collection;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 abstract class GetRequest implements RequestInterface
 {

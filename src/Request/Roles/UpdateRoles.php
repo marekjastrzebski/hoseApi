@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Request\Roles;
 
 use App\Repository\RolesRepository;
@@ -14,9 +14,9 @@ class UpdateRoles extends UpdateRequest
 		RolesRepository    $repository,
 		ValidatorInterface $validator,
 		ManagerRegistry    $registry,
-		RequestStack       $request)
+		RequestStack       $request
+	)
 	{
 		parent::__construct($repository, $validator, $registry, $request);
 	}
-
 }

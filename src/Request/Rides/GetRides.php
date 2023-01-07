@@ -29,7 +29,13 @@ class GetRides extends GetRequest
 		return $this;
 	}
 
-	private function listDatePeriod( \DatePeriod $dates): array
+	public function getDailyWithPayments(\DateTime $date): self
+	{
+		$this->entity = $this->repository->getDailyWithPayments($date);
+		return $this;
+	}
+
+	private function listDatePeriod(\DatePeriod $dates): array
 	{
 		$result = [];
 		foreach ($dates as $date){

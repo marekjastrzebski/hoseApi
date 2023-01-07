@@ -23,10 +23,6 @@ class Abonaments implements EntityInterface
 	#[Assert\NotBlank(message: 'Abonament type should not be empty')]
     private ?AbonamentTypes $type = null;
 
-    #[ORM\OneToMany(mappedBy: 'abonament', targetEntity: Users::class)]
-	#[Assert\NotBlank(message: 'Client should not empty')]
-    private Collection $client;
-
     #[ORM\Column(type: Types::DATE_MUTABLE)]
 	#[Assert\NotBlank(message: 'start date should not be empty')]
     private ?\DateTimeInterface $startDay = null;
@@ -49,12 +45,10 @@ class Abonaments implements EntityInterface
     #[ORM\Column]
     private ?bool $active = null;
 
-    public function __construct()
-    {
-        $this->client = new ArrayCollection();
-        $this->payments = new ArrayCollection();
-        $this->rides = new ArrayCollection();
-    }
+	#[Assert\NotBlank(message: 'Client should not empty')]
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Users $client = null;
 
     public function getId(): ?int
     {
@@ -69,36 +63,6 @@ class Abonaments implements EntityInterface
     public function setType(?AbonamentTypes $type): self
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Users>
-     */
-    public function getClient(): Collection
-    {
-        return $this->client;
-    }
-
-    public function addClient(Users $client): self
-    {
-        if (!$this->client->contains($client)) {
-            $this->client->add($client);
-            $client->setAbonament($this);
-        }
-
-        return $this;
-    }
-
-    public function removeClient(Users $client): self
-    {
-        if ($this->client->removeElement($client)) {
-            // set the owning side to null (unless already changed)
-            if ($client->getAbonament() === $this) {
-                $client->setAbonament(null);
-            }
-        }
 
         return $this;
     }
@@ -207,6 +171,18 @@ class Abonaments implements EntityInterface
     public function setActive(bool $active): self
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function getClient(): ?Users
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Users $client): self
+    {
+        $this->client = $client;
 
         return $this;
     }

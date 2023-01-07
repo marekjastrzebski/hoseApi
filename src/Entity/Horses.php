@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: HorsesRepository::class)]
 class Horses implements EntityInterface
@@ -17,12 +19,15 @@ class Horses implements EntityInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+	#[Assert\NotBlank(message: 'Horse name should not be empty')]
     private ?string $name = null;
 
     #[ORM\Column]
+	#[Assert\NotBlank(message: 'Horse contusion status should not be empty')]
     private ?bool $contusion = null;
 
     #[ORM\Column(length: 255)]
+	#[Assert\Url(message: 'Could not save an image')]
     private ?string $picture = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

@@ -18,6 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
 class RidesRepository extends ServiceEntityRepository implements RepositoryInterface
 {
 	use RepositorySupport;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Rides::class);

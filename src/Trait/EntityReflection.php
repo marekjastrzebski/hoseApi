@@ -51,7 +51,6 @@ trait EntityReflection
 		return array_filter($paramsList, $filter);
 	}
 
-
 	public function getRepositoryName(string $entityNameSpace): string
 	{
 		return str_replace('Entity', 'Repository', $entityNameSpace) . 'Repository';
@@ -78,5 +77,10 @@ trait EntityReflection
 		return $getters;
 	}
 
+	public function getClassType(EntityInterface $entity): string
+	{
+		$reflection = new \ReflectionClass($entity);
 
+		return $reflection->getName();
+	}
 }
