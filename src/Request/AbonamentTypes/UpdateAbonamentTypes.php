@@ -15,7 +15,8 @@ class UpdateAbonamentTypes extends UpdateRequest
 		AbonamentTypesRepository $repository,
 		ValidatorInterface       $validator,
 		ManagerRegistry          $registry,
-		RequestStack             $request)
+		RequestStack             $request
+	)
 	{
 		parent::__construct($repository, $validator, $registry, $request);
 	}

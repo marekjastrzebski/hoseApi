@@ -17,7 +17,8 @@ abstract class CreateRequest extends RequestValidation implements RequestInterfa
 		EntityInterface                     $entity,
 		ValidatorInterface                  $validator,
 		ManagerRegistry                     $registry,
-		RequestStack                        $request)
+		RequestStack                        $request
+	)
 	{
 		parent::__construct($validator, $registry, $request);
 		$this->persist($entity);

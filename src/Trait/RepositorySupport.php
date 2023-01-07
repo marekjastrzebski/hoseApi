@@ -14,6 +14,14 @@ trait RepositorySupport
 	{
 	}
 
+	/**
+	 * @throws \JsonException
+	 */
+	public function getFilters(): ?array
+	{
+		return json_decode(file_get_contents(__DIR__ . '/Source/fetchFilter.json'), true, 512, JSON_THROW_ON_ERROR);
+	}
+
 	public function saveEntity(EntityInterface $entity): void
 	{
 		$this->registry->getManager()->persist($entity);
@@ -36,10 +44,13 @@ trait RepositorySupport
 		$results = [];
 		foreach ($this->getEntityGetters($entity) as $field => $getter) {
 			$value = $entity->$getter();
+			if(in_array($field, $this->getFilters(), true)){
+				continue;
+			}
 			if($value instanceof \DateTime){
 				$value = explode(' ',$value->format('Y-m-d H:i'));
 			}
-			if($value instanceof EntityInterface){
+			if($value instanceof EntityInterface ){
 				$value = $this->fetchEntity($value);
 			}
 			$results[$field] = $value;
@@ -47,5 +58,4 @@ trait RepositorySupport
 
 		return $results;
 	}
-
 }

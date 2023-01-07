@@ -16,16 +16,9 @@ class CreateUserRequest extends CreateRequest
 		UsersRepository    $repository,
 		ValidatorInterface $validator,
 		ManagerRegistry    $registry,
-		RequestStack       $request)
+		RequestStack       $request
+	)
 	{
 		parent::__construct($repository, (new Users()), $validator, $registry, $request);
-	}
-
-	/**
-	 * @return UsersRepository
-	 */
-	final public function getRepository(): UsersRepository
-	{
-		return $this->repository;
 	}
 }

@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Enum\Execute;
-use App\Enum\MethodPrefix;
 use App\Request\Abonaments\CreateAbonaments;
 use App\Request\Abonaments\GetAbonaments;
 use App\Request\Abonaments\UpdateAbonaments;
@@ -44,5 +43,4 @@ class AbonamentsController extends AbstractController
 
 		return new JsonResponse($this->executor->getResults(), $this->executor->getResponseCode());
 	}
-
 }

@@ -19,12 +19,4 @@ class UpdateUserRequest extends UpdateRequest
 	{
 		parent::__construct($repository, $validator, $registry, $request);
 	}
-
-	/**
-	 * @return UsersRepository
-	 */
-	final public function getRepository(): UsersRepository
-	{
-		return $this->repository;
-	}
 }

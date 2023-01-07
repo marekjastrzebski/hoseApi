@@ -4,7 +4,6 @@ namespace App\Request\Abonaments;
 
 use App\Repository\AbonamentsRepository;
 use App\Request\Core\UpdateRequest;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Request\Core;
 
 use App\Entity\EntityInterface;
-use App\Repository\RepositoryInterface;
 use App\Validation\RequestValidation;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

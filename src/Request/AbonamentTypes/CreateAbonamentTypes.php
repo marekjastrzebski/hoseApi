@@ -22,9 +22,4 @@ class CreateAbonamentTypes extends CreateRequest
 	{
 		parent::__construct($repository, new AbonamentTypes(), $validator, $registry, $request);
 	}
-
-	public function getRepository(): EntityRepository
-	{
-		return $this->repository;
-	}
 }
